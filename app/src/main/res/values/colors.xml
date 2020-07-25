@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#E40101</color>
+    <color name="colorPrimaryDark">#950505</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#111111</color>
+    <color name="selectedColor">#234134</color>
+    <color name="my_statusbar_color">#051E31</color>
+
+
+    <color name="colorTransparantPrimary">#E60097A7</color>
+    <color name="colorTransparantPrimaryDark">#E6006978</color>
+    <color name="colorTransparantAccent">#E68AC9D3</color>
+    <color name="cardTransparentColor">#E65E5196</color>
+    <color name="backC">#203269</color>
+</resources>
