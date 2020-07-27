@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="2dp"
@@ -87,7 +88,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:src="@drawable/new_donor"
-                    android:id="@+id/imv_atm"/>
+                    android:id="@+id/imv_add_donor"/>
 
             </RelativeLayout>
 
@@ -121,7 +122,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentBottom="true"
                     android:src="@drawable/donor"
-                    android:id="@+id/imv_branch"/>
+                    android:id="@+id/imv_donor_list"/>
 
             </RelativeLayout>
 

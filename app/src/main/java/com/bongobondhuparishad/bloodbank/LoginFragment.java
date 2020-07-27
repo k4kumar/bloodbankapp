@@ -1,9 +1,12 @@
 package com.bongobondhuparishad.bloodbank;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,6 +16,9 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
 
 import org.json.JSONObject;
 
@@ -39,6 +45,8 @@ public class LoginFragment extends Fragment {
 
     private EditText txtUsername;
     private EditText txtPassword;
+
+    private MaterialButton btnLogin;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -84,47 +92,119 @@ public class LoginFragment extends Fragment {
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        String bloodbank_login = "http://bloodbank.manchitro.info/api/v1/admin/login";
+
         txtPassword = (EditText) view.findViewById(R.id.input_password);
         txtUsername = (EditText) view.findViewById(R.id.input_username);
 
-        JSONObject jsonObject = null;
-        BufferedReader reader = null;
-        Map postData = new HashMap<>();
-        postData.put("password",txtPassword.getText());
-        postData.put("username",txtUsername.getText());
+        btnLogin = (MaterialButton) view.findViewById(R.id.btn_login);
 
-        try {
-            URL url = new URL(bloodbank_login);
-            StringBuilder data = new StringBuilder();
-            for (Map.Entry<String, Object> param : postData.entrySet()) {
-                if (data.length() != 0) data.append('&');
-                data.append(URLEncoder.encode(param.getKey(), "UTF-8"));
-                data.append('=');
-                data.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
-            }
-            byte[] postDataBytes = postData.toString().getBytes("UTF-8");
-
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            connection.setConnectTimeout(8000);
-            connection.setRequestMethod("POST");
-            connection.setUseCaches(false);
-            connection.setDoOutput(true);
-            connection.getOutputStream().write(postDataBytes);
-            connection.connect();
-
-            StringBuilder sb;
-            int statusCode = connection.getResponseCode();
-            if (statusCode == 200) {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("login","Inside onviewcreated");
+                new PostAsyncTask().execute();
 
             }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-
+        });
 
         // or  (ImageView) view.findViewById(R.id.foo);
     }
+
+    private class PostAsyncTask extends AsyncTask<String,Void,JSONObject> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            Map postData = new HashMap<>();
+            postData.put("password",txtPassword.getText());
+            postData.put("username",txtUsername.getText());
+            return post("http://bloodbank.manchitro.info/api/v1/admin/login",postData);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject response) {
+            super.onPostExecute(response);
+            //All your UI operation can be performed here
+            //Response string can be converted to JSONObject/JSONArray like
+            try {
+//                Toast.makeText(getActivity(), String.format("%s : %s",response.getString("message"),response.getString("code")), Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), String.format("%s","Something went wrong!!!!!!"), Toast.LENGTH_LONG).show();
+
+            }
+            System.out.println(response);
+        }
+        /**
+         * Method allows to HTTP POST request to the server to send data to a specified resource
+         * @param REQUEST_URL URL of the API to be requested
+         * @param params parameter that are to be send in the "body" of the request Ex: parameter=value&amp;also=another
+         * returns response as a JSON object
+         */
+        public JSONObject post(String REQUEST_URL,Map<String, Object> params){
+            JSONObject jsonObject = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL(REQUEST_URL);
+                StringBuilder postData = new StringBuilder();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+                byte[] postDataBytes = postData.toString().getBytes("UTF-8");
+
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                connection.setConnectTimeout(8000);
+                connection.setRequestMethod("POST");
+                connection.setUseCaches(false);
+                connection.setDoOutput(true);
+                connection.getOutputStream().write(postDataBytes);
+                connection.connect();
+
+                StringBuilder sb;
+                int statusCode = connection.getResponseCode();
+                Log.d("Status Code:",""+statusCode);
+                FragmentManager fragmentManager;
+                FragmentTransaction fragmentTransaction;
+
+                if (statusCode == 200) {
+
+                        // TODO Auto-generated method stub
+                        Fragment fragment = new AdminBloodDonorFragment();
+                        Log.d("From inside if code",""+statusCode);
+
+                    sb = new StringBuilder();
+                    reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    jsonObject = new JSONObject(sb.toString());
+
+                        fragmentManager = getFragmentManager();
+
+                        fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+
+                }
+                else{
+                    Toast.makeText(getActivity(), "Wrong username and password combination", Toast.LENGTH_SHORT).show();
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return jsonObject;
+        }
+    }
 }
+
+
