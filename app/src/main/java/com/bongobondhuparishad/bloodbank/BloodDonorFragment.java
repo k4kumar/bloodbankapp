@@ -1,5 +1,6 @@
 package com.bongobondhuparishad.bloodbank;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -7,9 +8,23 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +44,12 @@ public class BloodDonorFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private String url;
 
     private RecyclerView recyclerView;
-    private RecyclerView.Adapter adapter;
+    private AdminBloodDonorAdapter adapter;
+
+    private EditText searchFilter;
 
     private List<AdminBloodDonor> listItems;
 
@@ -74,24 +92,82 @@ public class BloodDonorFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        searchFilter = (EditText) view.findViewById(R.id.searchFilter);
+
         listItems = new ArrayList<AdminBloodDonor>();
+        url = "http://bloodbank.manchitro.info/api/v1/admin/blooddonors";
+        loadRecyclerViewData();
 
-        for(int i=0; i<2;i++)
-        {
-            AdminBloodDonor listItem = new AdminBloodDonor(
-                    "Kumarjit Dutta",
-                    "Mobile: 01675468303, Address: Bashabo, Last Dontated Date: 01-Jul-2000"
-            );
+        searchFilter.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-            listItems.add(listItem);
-        }
+            }
 
-        adapter = new AdminBloodDonorAdapter(listItems,getContext());
-        recyclerView.setAdapter(adapter);
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+               adapter.getFilter().filter(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+    }
+
+    private void loadRecyclerViewData() {
+        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Loading data...");
+        progressDialog.show();
+
+        StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        progressDialog.dismiss();
+                        try{
+                            JSONObject jsonObject = new JSONObject(response);
+                            JSONObject data = jsonObject.getJSONObject("data");
+                            JSONArray array = data.getJSONArray("blooddonors");
+
+                            for(int i = 0;i<array.length();i++)
+                            {
+                                JSONObject o = array.getJSONObject(i);
+                                AdminBloodDonor adminBloodDonor = new AdminBloodDonor(
+                                        o.getString("name")+" ("+o.getString("regNo")+")",
+                                        o.getString("bloodGroup")+"\n"+o.getString("mobile")+"\n"+o.getString("division")
+                                );
+
+                                listItems.add(adminBloodDonor);
+                            }
+
+                            adapter = new AdminBloodDonorAdapter(listItems,getActivity());
+                            recyclerView.setAdapter(adapter);
+                        }catch (Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        progressDialog.dismiss();
+                        Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+        requestQueue.add(stringRequest);
+
     }
 }

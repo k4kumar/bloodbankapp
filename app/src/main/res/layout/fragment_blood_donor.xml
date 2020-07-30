@@ -3,8 +3,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context=".BloodDonorFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            app:boxBackgroundColor="@color/white"
+            android:background="@color/white"
+            android:textColorHint="@color/colorPrimary">
+            <EditText android:id="@+id/searchFilter"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPersonName"
+                android:hint="Search by regno, name, bloodgroup etc."/>
+        </com.google.android.material.textfield.TextInputLayout>
 
     <!-- TODO: Update blank fragment layout -->
     <androidx.recyclerview.widget.RecyclerView
@@ -13,5 +34,5 @@
         android:id="@+id/recyclerView">
 
     </androidx.recyclerview.widget.RecyclerView>
-
+    </LinearLayout>
 </FrameLayout>

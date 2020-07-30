@@ -1,12 +1,31 @@
 package com.bongobondhuparishad.bloodbank;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import com.google.android.material.button.MaterialButton;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +42,18 @@ public class AddDonorFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private EditText txtName;
+    private EditText txtRegNo;
+    private EditText txtDivision;
+    private EditText txtBloodGroup;
+    private EditText txtMobileNo;
+    private EditText txtEmergencyContact;
+    private EditText txtLastDonationDate;
+    private EditText txtEmail;
+    private EditText txtNickname;
+
+    private MaterialButton btnSubmit;
 
     public AddDonorFragment() {
         // Required empty public constructor
@@ -60,5 +91,137 @@ public class AddDonorFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_donor, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+
+        txtName = (EditText) view.findViewById(R.id.input_name);
+        txtNickname = (EditText) view.findViewById(R.id.input_nickname);
+        txtRegNo = (EditText) view.findViewById(R.id.input_regno);
+        txtMobileNo = (EditText) view.findViewById(R.id.input_mobile);
+        txtEmergencyContact = (EditText) view.findViewById(R.id.input_emergency_contact);
+        txtBloodGroup = (EditText) view.findViewById(R.id.input_bloodgroup);
+        txtDivision = (EditText) view.findViewById(R.id.input_division);
+        txtLastDonationDate = (EditText) view.findViewById(R.id.input_last_donate_date);
+        txtEmail = (EditText) view.findViewById(R.id.input_email);
+
+        btnSubmit = (MaterialButton) view.findViewById(R.id.btn_submit);
+
+        btnSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("login","Inside onviewcreated");
+                new AddDonorFragment.PostAsyncTask().execute();
+
+            }
+        });
+
+        // or  (ImageView) view.findViewById(R.id.foo);
+    }
+
+
+    private class PostAsyncTask extends AsyncTask<String,Void, JSONObject> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected JSONObject doInBackground(String... params) {
+            Map postData = new HashMap<>();
+            postData.put("Name",txtName.getText());
+            postData.put("Division",txtDivision.getText());
+            postData.put("Mobile",txtMobileNo.getText());
+            postData.put("Email",txtEmail.getText());
+            postData.put("BloodGroup",txtBloodGroup.getText());
+            postData.put("LastDonatedDate",txtLastDonationDate.getText());
+            postData.put("RegNo",txtRegNo.getText());
+            postData.put("EmergencyContact",txtEmergencyContact.getText());
+            postData.put("NickName",txtNickname.getText());
+            return post("http://bloodbank.manchitro.info/api/v1/blooddonor/registration",postData);
+        }
+
+        @Override
+        protected void onPostExecute(JSONObject response) {
+            super.onPostExecute(response);
+            //All your UI operation can be performed here
+            //Response string can be converted to JSONObject/JSONArray like
+
+            FragmentManager fragmentManager;
+            FragmentTransaction fragmentTransaction;
+            try {
+                Log.i("response:",response.getString("code"));
+                if(response.getString("code").equals("404"))
+                {
+                    Log.i("info", "inside 404");
+                    Toast.makeText(getActivity(), "Username and password combination wrong", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Log.i("info", "inside success");
+                    Fragment fragment = new BloodDonorFragment();
+                    fragmentManager = getFragmentManager();
+                    fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+                //Toast.makeText(getActivity(), String.format("%s : %s",response.getString("message"),response.getString("code")), Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), String.format("%s","Something went wrong!!!!!!"), Toast.LENGTH_LONG).show();
+
+            }
+            System.out.println(response);
+        }
+        /**
+         * Method allows to HTTP POST request to the server to send data to a specified resource
+         * @param REQUEST_URL URL of the API to be requested
+         * @param params parameter that are to be send in the "body" of the request Ex: parameter=value&amp;also=another
+         * returns response as a JSON object
+         */
+        public JSONObject post(String REQUEST_URL,Map<String, Object> params){
+            JSONObject jsonObject = null;
+            BufferedReader reader = null;
+            try {
+                URL url = new URL(REQUEST_URL);
+                StringBuilder postData = new StringBuilder();
+                for (Map.Entry<String, Object> param : params.entrySet()) {
+                    if (postData.length() != 0) postData.append('&');
+                    postData.append(URLEncoder.encode(param.getKey(), "UTF-8"));
+                    postData.append('=');
+                    postData.append(URLEncoder.encode(String.valueOf(param.getValue()), "UTF-8"));
+                }
+                byte[] postDataBytes = postData.toString().getBytes("UTF-8");
+
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                connection.setConnectTimeout(8000);
+                connection.setRequestMethod("POST");
+                connection.setUseCaches(false);
+                connection.setDoOutput(true);
+                connection.getOutputStream().write(postDataBytes);
+                connection.connect();
+
+                StringBuilder sb;
+                int statusCode = connection.getResponseCode();
+                Log.d("Status Code:",""+statusCode);
+
+                if (statusCode == 200) {
+                    sb = new StringBuilder();
+                    reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        sb.append(line);
+                    }
+                    jsonObject = new JSONObject(sb.toString());
+                }
+
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return jsonObject;
+        }
     }
 }

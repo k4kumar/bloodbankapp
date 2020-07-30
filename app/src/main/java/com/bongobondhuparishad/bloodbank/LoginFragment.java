@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -129,8 +132,25 @@ public class LoginFragment extends Fragment {
             super.onPostExecute(response);
             //All your UI operation can be performed here
             //Response string can be converted to JSONObject/JSONArray like
+
+            FragmentManager fragmentManager;
+            FragmentTransaction fragmentTransaction;
             try {
-//                Toast.makeText(getActivity(), String.format("%s : %s",response.getString("message"),response.getString("code")), Toast.LENGTH_LONG).show();
+                Log.i("response:",response.getString("code"));
+                if(response.getString("code").equals("404"))
+                {
+                    Log.i("info", "inside 404");
+                    Toast.makeText(getActivity(), "Username and password combination wrong", Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Log.i("info", "inside success");
+                    Fragment fragment = new BloodDonorFragment();
+                    fragmentManager = getFragmentManager();
+                    fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                }
+                //Toast.makeText(getActivity(), String.format("%s : %s",response.getString("message"),response.getString("code")), Toast.LENGTH_LONG).show();
             } catch (Exception e) {
                 e.printStackTrace();
                 Toast.makeText(getActivity(), String.format("%s","Something went wrong!!!!!!"), Toast.LENGTH_LONG).show();
@@ -170,15 +190,8 @@ public class LoginFragment extends Fragment {
                 StringBuilder sb;
                 int statusCode = connection.getResponseCode();
                 Log.d("Status Code:",""+statusCode);
-                FragmentManager fragmentManager;
-                FragmentTransaction fragmentTransaction;
 
                 if (statusCode == 200) {
-
-                        // TODO Auto-generated method stub
-                        Fragment fragment = new AdminBloodDonorFragment();
-                        Log.d("From inside if code",""+statusCode);
-
                     sb = new StringBuilder();
                     reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
                     String line;
@@ -186,16 +199,14 @@ public class LoginFragment extends Fragment {
                         sb.append(line);
                     }
                     jsonObject = new JSONObject(sb.toString());
-
-                        fragmentManager = getFragmentManager();
-
-                        fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
-
                 }
                 else{
-                    Toast.makeText(getActivity(), "Wrong username and password combination", Toast.LENGTH_SHORT).show();
+                    jsonObject = new JSONObject("{\n" +
+                            "  \"data\": {},\n" +
+                            "  \"code\": 404,\n" +
+                            "  \"message\": \"Username and password is not correct!\",\n" +
+                            "  \"isSuccess\": false\n" +
+                            "}");
                 }
             }
             catch (Exception e){
