@@ -1,5 +1,6 @@
 package com.bongobondhuparishad.bloodbank;
 
+import android.annotation.SuppressLint;
 import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.os.AsyncTask;
@@ -47,7 +48,7 @@ import java.util.Map;
  * Use the {@link AdminBloodDonorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AdminBloodDonorFragment extends Fragment {
+public class AdminBloodDonorFragment extends Fragment implements AdminBloodDonorAdapter.OnDonorListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,6 +59,8 @@ public class AdminBloodDonorFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private String url;
+
+    private static final String TAG = "Admin Donor Fragment";
 
     private RecyclerView recyclerView;
     private AdminBloodDonorAdapter adapter;
@@ -115,7 +118,7 @@ public class AdminBloodDonorFragment extends Fragment {
 
         listItems = new ArrayList<AdminBloodDonor>();
         url = "http://bloodbank.manchitro.info/api/v1/admin/blooddonors";
-        loadRecyclerViewData();
+        loadRecyclerViewData(this);
 
         searchFilter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -135,7 +138,7 @@ public class AdminBloodDonorFragment extends Fragment {
         });
     }
 
-    private void loadRecyclerViewData() {
+    private void loadRecyclerViewData(final AdminBloodDonorAdapter.OnDonorListener onDonorListener) {
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading data...");
         progressDialog.show();
@@ -155,14 +158,25 @@ public class AdminBloodDonorFragment extends Fragment {
                             {
                                 JSONObject o = array.getJSONObject(i);
                                 AdminBloodDonor adminBloodDonor = new AdminBloodDonor(
-                                               o.getString("name")+" ("+o.getString("regNo")+")",
+                                        o.getString("name"),
+                                        o.getInt("id"),
+                                        o.getString("mobile"),
+                                        o.getString("bloodGroup"),
+                                        o.getString("email"),
+                                        o.getString("division"),
+                                        o.getString("lastDonatedDate"),
+                                        o.getString("regNo"),
+                                        o.getString("comment"),
+                                        o.getString("emergencyContact"),
+                                        o.getBoolean("isVerified"),
+                                        o.getBoolean("hasDonated"),
                                         o.getString("bloodGroup")+"\n"+o.getString("mobile")+"\n"+o.getString("division")
                                 );
 
                                 listItems.add(adminBloodDonor);
                             }
 
-                            adapter = new AdminBloodDonorAdapter(listItems,getActivity());
+                            adapter = new AdminBloodDonorAdapter(listItems,getActivity(),onDonorListener);
                             recyclerView.setAdapter(adapter);
                         }catch (Exception e)
                         {
@@ -185,4 +199,20 @@ public class AdminBloodDonorFragment extends Fragment {
 
     }
 
+    @Override
+    public void onDonorClick(int position) {
+
+        Log.d(TAG, "onDonorClick: "+position);
+        FragmentManager fragmentManager;
+        FragmentTransaction fragmentTransaction;
+        Fragment fragment = new AdminDonorDetailsFragment();
+        Bundle bundle = new Bundle();
+        AdminBloodDonor obj = listItems.get(position);
+        bundle.putSerializable("donor_obj", obj);
+        fragment.setArguments(bundle);
+        fragmentManager = getFragmentManager();
+        fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
 }

@@ -14,8 +14,10 @@
         <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add Blood Donor"
-            android:textAlignment="center">
+            android:text="New Donor"
+            android:textAlignment="center"
+            android:textSize="20dp"
+            android:textColor="@color/colorPrimary">
         </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold>
 
 
@@ -103,20 +105,22 @@
                 android:hint="Emergency Contact Number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
+        <Spinner
+            android:id="@+id/input_bloodgroup"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
-            app:boxBackgroundColor="@android:color/transparent"
-            android:background="@android:color/transparent">
-            <EditText android:id="@+id/input_bloodgroup"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Blood Group"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            />
 
+        <RelativeLayout
+            android:id="@+id/bloodgroupRel"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="10dp"
+            android:background="#FF9C8A8A" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"

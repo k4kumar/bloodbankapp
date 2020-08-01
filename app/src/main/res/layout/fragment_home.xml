@@ -42,7 +42,7 @@
             android:layout_gravity="center"
             android:fontFamily="@font/roboto_medium"
             android:text="Blood Bank"
-            android:textColor="#5E5E5E"
+            android:textColor="@color/colorPrimary"
             android:textSize="18dp" />
 
         <View
@@ -79,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
                     android:text="Add Donor"
-                    android:textColor="#5E5E5E"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="18dp" />
 
                 <ImageView
@@ -113,7 +113,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/roboto_bold"
                     android:text="Donor List"
-                    android:textColor="#5E5E5E"
+                    android:textColor="@color/colorPrimary"
                     android:textSize="18dp" />
 
                 <ImageView

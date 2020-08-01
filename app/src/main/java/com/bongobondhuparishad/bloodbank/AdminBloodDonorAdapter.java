@@ -24,11 +24,13 @@ public class AdminBloodDonorAdapter extends RecyclerView.Adapter<AdminBloodDonor
     private List<AdminBloodDonor> listItems;
     private List<AdminBloodDonor> listItemsFull;
     private Context context;
+    private OnDonorListener mOnDonorListener;
 
-    public AdminBloodDonorAdapter(List<AdminBloodDonor> listItems, Context context) {
+    public AdminBloodDonorAdapter(List<AdminBloodDonor> listItems, Context context, OnDonorListener onDonorListener) {
         this.listItems = listItems;
         this.context = context;
         this.listItemsFull = new ArrayList<>(listItems);
+        this.mOnDonorListener = onDonorListener;
     }
 
     @NonNull
@@ -37,14 +39,14 @@ public class AdminBloodDonorAdapter extends RecyclerView.Adapter<AdminBloodDonor
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_admin_blood_donors, parent, false);
 
-        return new ViewHolder(v);
+        return new AdminBloodDonorAdapter.ViewHolder(v, mOnDonorListener);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AdminBloodDonor listItem = listItems.get(position);
 
-        holder.txtViewName.setText(listItem.getName());
+        holder.txtViewName.setText(listItem.getName()+"("+listItem.getReg_no()+")");
         holder.txtViewDetails.setText(listItem.getDetails());
     }
 
@@ -90,16 +92,29 @@ public class AdminBloodDonorAdapter extends RecyclerView.Adapter<AdminBloodDonor
         }
     };
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         public TextView txtViewName;
         public TextView txtViewDetails;
+        OnDonorListener onDonorListener;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView, OnDonorListener onDonorListener) {
             super(itemView);
 
             txtViewName = (TextView) itemView.findViewById(R.id.textViewName);
             txtViewDetails = (TextView) itemView.findViewById(R.id.textViewDetails);
+
+            this.onDonorListener = onDonorListener;
+            itemView.setOnClickListener(this);
         }
+
+        @Override
+        public void onClick(View view) {
+            onDonorListener.onDonorClick(getAdapterPosition());
+        }
+    }
+
+    public interface OnDonorListener{
+        void onDonorClick(int position);
     }
 }

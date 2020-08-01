@@ -144,7 +144,7 @@ public class LoginFragment extends Fragment {
                 }
                 else{
                     Log.i("info", "inside success");
-                    Fragment fragment = new BloodDonorFragment();
+                    Fragment fragment = new AdminBloodDonorFragment();
                     fragmentManager = getFragmentManager();
                     fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
                     fragmentTransaction.addToBackStack(null);

@@ -2,11 +2,19 @@
     <string name="app_name">bloodbank</string>
     <string name="hello_blank_fragment">This is the main fragment</string>
 
-    <array name="menuOptions">
-        <item>Home</item>
-        <item>Personal</item>
-        <item>High scores</item>
-        <item>Settings</item>
-        <item>About</item>
-    </array>
+    <string-array name="bloodgroups">
+        <item></item>
+        <item>A(+ve)</item>
+        <item>A(-ve)</item>
+        <item>B(+ve)</item>
+        <item>B(-ve)</item>
+        <item>O(+ve)</item>
+        <item>O(-ve)</item>
+        <item>AB(+ve)</item>
+        <item>AB(-ve)</item>
+    </string-array>
+
+
+    <string name="twitterUsername">\@joeytribbiani</string>
+
 </resources>

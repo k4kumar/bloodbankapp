@@ -5,11 +5,14 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +37,7 @@ import java.util.List;
  * Use the {@link BloodDonorFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BloodDonorFragment extends Fragment {
+public class BloodDonorFragment extends Fragment implements BloodDonorAdapter.OnDonorListener {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -46,8 +49,10 @@ public class BloodDonorFragment extends Fragment {
     private String mParam2;
     private String url;
 
+    private static final String TAG = "Blood Donor Fragment";
+
     private RecyclerView recyclerView;
-    private AdminBloodDonorAdapter adapter;
+    private BloodDonorAdapter adapter;
 
     private EditText searchFilter;
 
@@ -100,8 +105,8 @@ public class BloodDonorFragment extends Fragment {
         searchFilter = (EditText) view.findViewById(R.id.searchFilter);
 
         listItems = new ArrayList<AdminBloodDonor>();
-        url = "http://bloodbank.manchitro.info/api/v1/admin/blooddonors";
-        loadRecyclerViewData();
+        url = "http://bloodbank.manchitro.info/api/v1/blooddonors";
+        loadRecyclerViewData(this);
 
         searchFilter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -121,7 +126,7 @@ public class BloodDonorFragment extends Fragment {
         });
     }
 
-    private void loadRecyclerViewData() {
+    private void loadRecyclerViewData(final BloodDonorAdapter.OnDonorListener onDonorListener) {
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading data...");
         progressDialog.show();
@@ -141,14 +146,25 @@ public class BloodDonorFragment extends Fragment {
                             {
                                 JSONObject o = array.getJSONObject(i);
                                 AdminBloodDonor adminBloodDonor = new AdminBloodDonor(
-                                        o.getString("name")+" ("+o.getString("regNo")+")",
+                                        o.getString("name"),
+                                        o.getInt("id"),
+                                        o.getString("mobile"),
+                                        o.getString("bloodGroup"),
+                                        o.getString("email"),
+                                        o.getString("division"),
+                                        o.getString("lastDonatedDate"),
+                                        o.getString("regNo"),
+                                        o.getString("comment"),
+                                        o.getString("emergencyContact"),
+                                        o.getBoolean("isVerified"),
+                                        o.getBoolean("hasDonated"),
                                         o.getString("bloodGroup")+"\n"+o.getString("mobile")+"\n"+o.getString("division")
                                 );
 
                                 listItems.add(adminBloodDonor);
                             }
 
-                            adapter = new AdminBloodDonorAdapter(listItems,getActivity());
+                            adapter = new BloodDonorAdapter(listItems,getActivity(),onDonorListener);
                             recyclerView.setAdapter(adapter);
                         }catch (Exception e)
                         {
@@ -168,6 +184,28 @@ public class BloodDonorFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
         requestQueue.add(stringRequest);
+
+    }
+
+    @Override
+    public void onDonorClick(int position) {
+
+        Log.d(TAG, "onDonorClick: "+position);
+        AdminBloodDonor obj = listItems.get(position);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("donor_obj", obj);
+        Log.d(TAG, "onDonorClick: "+obj.getName());
+
+
+        FragmentManager fragmentManager;
+        FragmentTransaction fragmentTransaction;
+        Fragment fragment = new DonorDetailsFragment();
+
+        fragment.setArguments(bundle);
+        fragmentManager = getFragmentManager();
+        fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
 
     }
 }

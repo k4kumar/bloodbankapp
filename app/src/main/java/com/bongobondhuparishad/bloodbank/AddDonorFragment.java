@@ -1,5 +1,10 @@
 package com.bongobondhuparishad.bloodbank;
 
+import android.app.DatePickerDialog;
+import androidx.appcompat.app.AlertDialog;
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -12,7 +17,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -24,6 +34,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +54,9 @@ public class AddDonorFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    private static final String Tag = "AddDonorFragment";
+    private DatePickerDialog.OnDateSetListener onDateSetListener;
+
     private EditText txtName;
     private EditText txtRegNo;
     private EditText txtDivision;
@@ -52,6 +66,7 @@ public class AddDonorFragment extends Fragment {
     private EditText txtLastDonationDate;
     private EditText txtEmail;
     private EditText txtNickname;
+    private Spinner spinnerBloodGroup;
 
     private MaterialButton btnSubmit;
 
@@ -101,12 +116,50 @@ public class AddDonorFragment extends Fragment {
         txtRegNo = (EditText) view.findViewById(R.id.input_regno);
         txtMobileNo = (EditText) view.findViewById(R.id.input_mobile);
         txtEmergencyContact = (EditText) view.findViewById(R.id.input_emergency_contact);
-        txtBloodGroup = (EditText) view.findViewById(R.id.input_bloodgroup);
+        spinnerBloodGroup = (Spinner) view.findViewById(R.id.input_bloodgroup);
         txtDivision = (EditText) view.findViewById(R.id.input_division);
         txtLastDonationDate = (EditText) view.findViewById(R.id.input_last_donate_date);
         txtEmail = (EditText) view.findViewById(R.id.input_email);
 
+
+        ArrayAdapter<String> bloodDonorAdapter = new ArrayAdapter<String>(getActivity(),
+                R.layout.spnr_bloodgroup,
+                getResources().getStringArray(R.array.bloodgroups));
+        bloodDonorAdapter.setDropDownViewResource(R.layout.drpdn_bloodgroup);
+        spinnerBloodGroup.setAdapter(bloodDonorAdapter);
+
+
         btnSubmit = (MaterialButton) view.findViewById(R.id.btn_submit);
+
+        txtLastDonationDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Calendar cal = Calendar.getInstance();
+                int year = cal.get(Calendar.YEAR);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                DatePickerDialog dialog = new DatePickerDialog(
+                        getActivity(),
+                        R.style.DialogTheme,
+                        onDateSetListener,
+                        year,month,day);
+
+                //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+                dialog.show();
+            }
+        });
+
+        onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+
+                month = month + 1;
+                String date = month +"/"+day+"/"+ year;
+                txtLastDonationDate.setText(date);
+
+            }
+        };
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,7 +187,7 @@ public class AddDonorFragment extends Fragment {
             postData.put("Division",txtDivision.getText());
             postData.put("Mobile",txtMobileNo.getText());
             postData.put("Email",txtEmail.getText());
-            postData.put("BloodGroup",txtBloodGroup.getText());
+            postData.put("BloodGroup",spinnerBloodGroup.getSelectedItem().toString());
             postData.put("LastDonatedDate",txtLastDonationDate.getText());
             postData.put("RegNo",txtRegNo.getText());
             postData.put("EmergencyContact",txtEmergencyContact.getText());
@@ -155,7 +208,17 @@ public class AddDonorFragment extends Fragment {
                 if(response.getString("code").equals("404"))
                 {
                     Log.i("info", "inside 404");
-                    Toast.makeText(getActivity(), "Username and password combination wrong", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Can't connect with server.", Toast.LENGTH_LONG).show();
+                }
+                else if(response.getString("code").equals("406"))
+                {
+                    Log.i("info", "inside 406");
+                    Toast.makeText(getActivity(), "Please provide authentic data.", Toast.LENGTH_LONG).show();
+                }
+                else if(response.getString("code").equals(300))
+                {
+                    Log.i("info", "inside 300");
+                    Toast.makeText(getActivity(), "Please provide an unique registration number.", Toast.LENGTH_LONG).show();
                 }
                 else{
                     Log.i("info", "inside success");
