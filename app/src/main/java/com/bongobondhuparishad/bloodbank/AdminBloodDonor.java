@@ -16,6 +16,7 @@ public class AdminBloodDonor implements Serializable {
     private String emergency_contact;
     private boolean is_approved;
     private boolean has_donated;
+    private String background_color;
 
     public AdminBloodDonor(String name,  int id, String mobile, String blood_group,
                            String email, String division, String last_donation_date, String reg_no,
@@ -33,6 +34,22 @@ public class AdminBloodDonor implements Serializable {
         this.emergency_contact = emergency_contact==null? mobile:emergency_contact;
         this.is_approved = is_approved;
         this.has_donated = has_donated;
+    }
+
+    public boolean isIs_approved() {
+        return is_approved;
+    }
+
+    public boolean isHas_donated() {
+        return has_donated;
+    }
+
+    public String isBackground_color() {
+        return background_color;
+    }
+
+    public void setBackground_color(String background_color) {
+        this.background_color = background_color;
     }
 
     public int getId() {

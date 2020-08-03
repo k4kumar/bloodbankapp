@@ -3,9 +3,11 @@ package com.bongobondhuparishad.bloodbank;
 import android.app.LauncherActivity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
@@ -48,7 +50,19 @@ public class AdminBloodDonorAdapter extends RecyclerView.Adapter<AdminBloodDonor
 
         holder.txtViewName.setText(listItem.getName()+"("+listItem.getReg_no()+")");
         holder.txtViewDetails.setText(listItem.getDetails());
+
+        if(!listItem.is_approved())
+        {
+            holder.txtViewDetails.setBackgroundColor(Color.parseColor("#FFFFC106"));
+            holder.txtViewName.setBackgroundColor(Color.parseColor("#FFFFC106"));
+        }
+        else{
+            holder.txtViewDetails.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            holder.txtViewName.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        }
+
     }
+
 
     @Override
     public int getItemCount() {
@@ -71,7 +85,7 @@ public class AdminBloodDonorAdapter extends RecyclerView.Adapter<AdminBloodDonor
             }else{
                 String filterPattern = charSequence.toString().toLowerCase().trim();
                 for(AdminBloodDonor item: listItemsFull) {
-                    if(item.getName().toLowerCase().contains(filterPattern) || item.getDetails().toLowerCase().contains(filterPattern))
+                    if(item.getName().toLowerCase().contains(filterPattern) || item.getReg_no().contains(filterPattern) || item.getDetails().toLowerCase().contains(filterPattern))
                     {
                         filteredList.add(item);
                     }

@@ -70,7 +70,7 @@ public class BloodDonorAdapter extends RecyclerView.Adapter<BloodDonorAdapter.Vi
             } else {
                 String filterPattern = charSequence.toString().toLowerCase().trim();
                 for (AdminBloodDonor item : listItemsFull) {
-                    if (item.getName().toLowerCase().contains(filterPattern) || item.getDetails().toLowerCase().contains(filterPattern)) {
+                    if (item.getName().toLowerCase().contains(filterPattern) || item.getReg_no().contains(filterPattern) ||  item.getDetails().toLowerCase().contains(filterPattern)) {
                         filteredList.add(item);
                     }
                 }

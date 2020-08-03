@@ -173,6 +173,9 @@ public class AdminBloodDonorFragment extends Fragment implements AdminBloodDonor
                                         o.getString("bloodGroup")+"\n"+o.getString("mobile")+"\n"+o.getString("division")
                                 );
 
+                                if(!adminBloodDonor.is_approved())
+                                    adminBloodDonor.setBackground_color("Red");
+
                                 listItems.add(adminBloodDonor);
                             }
 

@@ -17,7 +17,10 @@ import android.widget.TextView;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,8 +82,18 @@ public class DonorDetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
+        SimpleDateFormat out_format = new SimpleDateFormat("dd/MM/yyyy");
         Bundle bundle = getArguments();
         AdminBloodDonor obj= (AdminBloodDonor) bundle.getSerializable("donor_obj");
+        Date date = new Date();
+
+        SimpleDateFormat in_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        try {
+            date = in_format.parse(obj.getLast_donation_date());
+            System.out.println(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         bloodgroup = (TextView) view.findViewById(R.id.tv_bloodgroup);
         email = (TextView) view.findViewById(R.id.tv_email);
@@ -100,6 +113,6 @@ public class DonorDetailsFragment extends Fragment {
         email.setText(obj.getEmail());
         emergency_contact.setText(obj.getEmergency_contact());
         contact.setText(obj.getMobile());
-        last_donation_date.setText(obj.getLast_donation_date());
+        last_donation_date.setText(out_format.format(date));
     }
 }

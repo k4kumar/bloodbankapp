@@ -1,4 +1,6 @@
 package com.bongobondhuparishad.bloodbank;
+import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -25,8 +27,7 @@ public class MainActivity extends AppCompatActivity  {
     LinearLayout admin,new_donor,blood_donors;
     RelativeLayout adminRel,newDonorRel,bloodDonorsRel;
 
-    private ImageView add_donor_button;
-    private ImageView donor_list_button;
+    private ImageView add_donor_button, home, donor_list_button;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -45,12 +46,23 @@ public class MainActivity extends AppCompatActivity  {
 
         add_donor_button=(ImageView) findViewById(R.id.imv_add_donor);
         donor_list_button=(ImageView) findViewById(R.id.imv_donor_list);
+        home = (ImageView) findViewById(R.id.imv_home);
 
         new_donor=findViewById(R.id.new_donor);
         blood_donors=findViewById(R.id.blood_donors);
         admin=findViewById(R.id.admin);
 
         fragmentManager = getSupportFragmentManager();
+
+        home.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                finish();
+                startActivity(getIntent());
+            }
+        });
 
         add_donor_button.setOnClickListener(new View.OnClickListener() {
 
@@ -88,6 +100,7 @@ public class MainActivity extends AppCompatActivity  {
                 Fragment fragment = new AddDonorFragment();
                 Log.d("admin","clicked add donor");
 
+                drawer.closeDrawer(navigationView);
                 fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -102,6 +115,7 @@ public class MainActivity extends AppCompatActivity  {
                 Fragment fragment = new BloodDonorFragment();
                 Log.d("admin","clicked donor list");
 
+                drawer.closeDrawer(navigationView);
                 fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
@@ -116,6 +130,7 @@ public class MainActivity extends AppCompatActivity  {
                 Fragment fragment = new LoginFragment();
                 Log.d("admin","clicked admin");
 
+                drawer.closeDrawer(navigationView);
                 fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();

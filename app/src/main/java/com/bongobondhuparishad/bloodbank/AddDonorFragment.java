@@ -57,15 +57,8 @@ public class AddDonorFragment extends Fragment {
     private static final String Tag = "AddDonorFragment";
     private DatePickerDialog.OnDateSetListener onDateSetListener;
 
-    private EditText txtName;
-    private EditText txtRegNo;
-    private EditText txtDivision;
-    private EditText txtBloodGroup;
-    private EditText txtMobileNo;
-    private EditText txtEmergencyContact;
-    private EditText txtLastDonationDate;
-    private EditText txtEmail;
-    private EditText txtNickname;
+    private EditText txtName,txtRegNo,txtDivision,txtMobileNo,txtEmergencyContact,txtLastDonationDate,txtEmail,txtNickname,
+            txtUsername,txtPassword;
     private Spinner spinnerBloodGroup;
 
     private MaterialButton btnSubmit;
@@ -120,7 +113,8 @@ public class AddDonorFragment extends Fragment {
         txtDivision = (EditText) view.findViewById(R.id.input_division);
         txtLastDonationDate = (EditText) view.findViewById(R.id.input_last_donate_date);
         txtEmail = (EditText) view.findViewById(R.id.input_email);
-
+        txtUsername = (EditText) view.findViewById(R.id.input_username);
+        txtPassword = (EditText) view.findViewById(R.id.input_password);
 
         ArrayAdapter<String> bloodDonorAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.spnr_bloodgroup,
@@ -130,6 +124,31 @@ public class AddDonorFragment extends Fragment {
 
 
         btnSubmit = (MaterialButton) view.findViewById(R.id.btn_submit);
+
+        txtLastDonationDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+
+                if(txtLastDonationDate.hasFocus())
+                {
+                    Calendar cal = Calendar.getInstance();
+                    int year = cal.get(Calendar.YEAR);
+                    int month = cal.get(Calendar.MONTH);
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+
+                    DatePickerDialog dialog = new DatePickerDialog(
+                            getActivity(),
+                            R.style.DialogTheme,
+                            onDateSetListener,
+                            year,month,day);
+
+                    dialog.show();
+                }
+
+
+            }
+
+        });
 
         txtLastDonationDate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,10 +164,11 @@ public class AddDonorFragment extends Fragment {
                         onDateSetListener,
                         year,month,day);
 
-                //dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
                 dialog.show();
             }
+
         });
+
 
         onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -192,6 +212,8 @@ public class AddDonorFragment extends Fragment {
             postData.put("RegNo",txtRegNo.getText());
             postData.put("EmergencyContact",txtEmergencyContact.getText());
             postData.put("NickName",txtNickname.getText());
+            postData.put("Username",txtUsername.getText());
+            postData.put("Password",txtPassword.getText());
             return post("http://bloodbank.manchitro.info/api/v1/blooddonor/registration",postData);
         }
 

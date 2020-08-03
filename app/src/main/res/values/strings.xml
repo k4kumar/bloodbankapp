@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">bloodbank</string>
+    <string name="app_name">Rupali Blood Bond</string>
     <string name="hello_blank_fragment">This is the main fragment</string>
 
     <string-array name="bloodgroups">

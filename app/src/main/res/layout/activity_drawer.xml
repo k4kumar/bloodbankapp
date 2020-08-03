@@ -27,7 +27,8 @@
                 android:paddingTop="10dp"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                android:src="@drawable/blood_bond" />
+                android:src="@drawable/blood_bond"
+                android:id="@+id/imv_home"/>
 
 
             <LinearLayout
