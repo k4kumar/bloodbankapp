@@ -58,7 +58,7 @@ public class AddDonorFragment extends Fragment {
     private DatePickerDialog.OnDateSetListener onDateSetListener;
 
     private EditText txtName,txtRegNo,txtDivision,txtMobileNo,txtEmergencyContact,txtLastDonationDate,txtEmail,txtNickname,
-            txtUsername,txtPassword;
+            txtPassword,txtConfirmPassword;
     private Spinner spinnerBloodGroup;
 
     private MaterialButton btnSubmit;
@@ -113,7 +113,7 @@ public class AddDonorFragment extends Fragment {
         txtDivision = (EditText) view.findViewById(R.id.input_division);
         txtLastDonationDate = (EditText) view.findViewById(R.id.input_last_donate_date);
         txtEmail = (EditText) view.findViewById(R.id.input_email);
-        txtUsername = (EditText) view.findViewById(R.id.input_username);
+        txtConfirmPassword = (EditText) view.findViewById(R.id.input_confirm_password);
         txtPassword = (EditText) view.findViewById(R.id.input_password);
 
         ArrayAdapter<String> bloodDonorAdapter = new ArrayAdapter<String>(getActivity(),
@@ -185,7 +185,16 @@ public class AddDonorFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("login","Inside onviewcreated");
-                new AddDonorFragment.PostAsyncTask().execute();
+
+                String password = txtPassword.getText().toString();
+                String confirm_password = txtConfirmPassword.getText().toString();
+                if (password.equals(confirm_password))
+                {
+                    new AddDonorFragment.PostAsyncTask().execute();
+                }
+                else{
+                    Toast.makeText(getActivity(),"Password and Confirm password do not match",Toast.LENGTH_LONG).show();
+                }
 
             }
         });
@@ -212,7 +221,7 @@ public class AddDonorFragment extends Fragment {
             postData.put("RegNo",txtRegNo.getText());
             postData.put("EmergencyContact",txtEmergencyContact.getText());
             postData.put("NickName",txtNickname.getText());
-            postData.put("Username",txtUsername.getText());
+            postData.put("Username",txtRegNo.getText());
             postData.put("Password",txtPassword.getText());
             return post("http://bloodbank.manchitro.info/api/v1/blooddonor/registration",postData);
         }

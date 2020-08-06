@@ -170,7 +170,7 @@ public class AdminBloodDonorFragment extends Fragment implements AdminBloodDonor
                                         o.getString("emergencyContact"),
                                         o.getBoolean("isVerified"),
                                         o.getBoolean("hasDonated"),
-                                        o.getString("bloodGroup")+"\n"+o.getString("mobile")+"\n"+o.getString("division")
+                                        o.getString("bloodGroup")+"\n"+o.getString("division")
                                 );
 
                                 if(!adminBloodDonor.is_approved())

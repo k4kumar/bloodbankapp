@@ -1,5 +1,6 @@
 package com.bongobondhuparishad.bloodbank;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,7 +29,7 @@ public class MainActivity extends AppCompatActivity  {
     LinearLayout admin,new_donor,blood_donors;
     RelativeLayout adminRel,newDonorRel,bloodDonorsRel;
 
-    private ImageView add_donor_button, home, donor_list_button;
+    private ImageView add_donor_button, home, donor_list_button, donation_request_button, login_button;
 
     FragmentManager fragmentManager;
     FragmentTransaction fragmentTransaction;
@@ -47,6 +49,9 @@ public class MainActivity extends AppCompatActivity  {
         add_donor_button=(ImageView) findViewById(R.id.imv_add_donor);
         donor_list_button=(ImageView) findViewById(R.id.imv_donor_list);
         home = (ImageView) findViewById(R.id.imv_home);
+        donation_request_button = (ImageView) findViewById(R.id.imv_add_donation_request);
+        login_button = (ImageView) findViewById(R.id.imv_login);
+
 
         new_donor=findViewById(R.id.new_donor);
         blood_donors=findViewById(R.id.blood_donors);
@@ -78,17 +83,69 @@ public class MainActivity extends AppCompatActivity  {
             }
         });
 
+        login_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Fragment fragment = new LoginFragment();
+                fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+        });
+
+        donation_request_button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                String user_role = pref.getString("user_role",null);
+
+                if(user_role!=null){
+                    if(user_role.equals("user"))
+                    {
+                        Toast.makeText(getApplicationContext(),"Logged in as user",Toast.LENGTH_LONG).show();
+                    }
+
+                    else if(user_role.equals("admin")){
+                        Toast.makeText(getApplicationContext(),"Logged in as admin",Toast.LENGTH_LONG).show();
+                    }
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Please login first",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         donor_list_button.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
-                Fragment fragment = new BloodDonorFragment();
-                Log.d("admin","clicked donor list");
 
-                fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                SharedPreferences pref = getApplicationContext().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                String user_role = pref.getString("user_role",null);
+
+                if(user_role!=null) {
+                    if (user_role.equals("user")) {
+                        Fragment fragment = new BloodDonorFragment();
+                        Log.d("admin", "clicked donor list");
+
+                        fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    } else if (user_role.equals("admin")) {
+                        Fragment fragment = new AdminBloodDonorFragment();
+                        Log.d("admin", "clicked donor list");
+
+                        fragmentTransaction = fragmentManager.beginTransaction().replace(R.id.fragmentContainer, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                }
+                else{
+                    Toast.makeText(getApplicationContext(),"Please login first",Toast.LENGTH_LONG).show();
+                }
+
+
             }
         });
 

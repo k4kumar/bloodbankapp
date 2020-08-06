@@ -123,7 +123,13 @@ public class AdminDonorDetailsFragment extends Fragment {
         name.setText(obj.getName());
         bloodgroup.setText(obj.getBlood_group());
         comment.setText(obj.getComment());
-        reg_no.setText("Reg No.("+obj.getReg_no()+")");
+        if(obj.getReg_no().length()>=11)
+        {
+            reg_no.setText(obj.getReg_no());
+        }
+        else{
+            reg_no.setText("Reg No.("+obj.getReg_no()+")");
+        }
         division.setText(obj.getDivision());
         email.setText(obj.getEmail());
         emergency_contact.setText(obj.getEmergency_contact());

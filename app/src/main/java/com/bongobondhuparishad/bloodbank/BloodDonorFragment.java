@@ -158,7 +158,7 @@ public class BloodDonorFragment extends Fragment implements BloodDonorAdapter.On
                                         o.getString("emergencyContact"),
                                         o.getBoolean("isVerified"),
                                         o.getBoolean("hasDonated"),
-                                        o.getString("bloodGroup")+"\n"+o.getString("mobile")+"\n"+o.getString("division")
+                                        o.getString("bloodGroup")+"\n"+o.getString("division")
                                 );
 
                                 listItems.add(adminBloodDonor);

@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:hint="Registration Number"/>
+                android:hint="Reg. Number/Mobile"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -157,12 +157,13 @@
             android:layout_marginBottom="8dp"
             app:boxBackgroundColor="@android:color/transparent"
             android:background="@android:color/transparent">
-            <EditText android:id="@+id/input_username"
+            <EditText android:id="@+id/input_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Username"/>
+                android:inputType="textPassword"
+                android:hint="Password"/>
         </com.google.android.material.textfield.TextInputLayout>
+
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -171,12 +172,13 @@
             android:layout_marginBottom="8dp"
             app:boxBackgroundColor="@android:color/transparent"
             android:background="@android:color/transparent">
-            <EditText android:id="@+id/input_password"
+            <EditText android:id="@+id/input_confirm_password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Password"/>
+                android:hint="Confirm Password"/>
         </com.google.android.material.textfield.TextInputLayout>
+
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_submit"

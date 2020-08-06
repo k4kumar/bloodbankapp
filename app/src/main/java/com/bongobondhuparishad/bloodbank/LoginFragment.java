@@ -1,5 +1,6 @@
 package com.bongobondhuparishad.bloodbank;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -46,7 +48,7 @@ public class LoginFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private EditText txtUsername;
+    private EditText txtRegno;
     private EditText txtPassword;
 
     private MaterialButton btnLogin;
@@ -97,7 +99,7 @@ public class LoginFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 
         txtPassword = (EditText) view.findViewById(R.id.input_password);
-        txtUsername = (EditText) view.findViewById(R.id.input_username);
+        txtRegno = (EditText) view.findViewById(R.id.input_regno);
 
         btnLogin = (MaterialButton) view.findViewById(R.id.btn_login);
 
@@ -123,7 +125,7 @@ public class LoginFragment extends Fragment {
         protected JSONObject doInBackground(String... params) {
             Map postData = new HashMap<>();
             postData.put("password",txtPassword.getText());
-            postData.put("username",txtUsername.getText());
+            postData.put("username",txtRegno.getText());
             return post("http://bloodbank.manchitro.info/api/v1/admin/login",postData);
         }
 
@@ -132,23 +134,45 @@ public class LoginFragment extends Fragment {
             super.onPostExecute(response);
             //All your UI operation can be performed here
             //Response string can be converted to JSONObject/JSONArray like
-
             FragmentManager fragmentManager;
             FragmentTransaction fragmentTransaction;
             try {
-                Log.i("response:",response.getString("code"));
+                JSONObject data = response.getJSONObject("data");
+                JSONObject user = data.getJSONObject("user");
+                Log.i("response:",user.getString("role"));
                 if(response.getString("code").equals("404"))
                 {
                     Log.i("info", "inside 404");
-                    Toast.makeText(getActivity(), "Username and password combination wrong", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Reg no. and password combination wrong", Toast.LENGTH_LONG).show();
                 }
                 else{
+                    String user_role = user.getString("role");
+                    String reg_no = user.getString("username");
                     Log.i("info", "inside success");
-                    Fragment fragment = new AdminBloodDonorFragment();
-                    fragmentManager = getFragmentManager();
-                    fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
+
+                    SharedPreferences pref = getActivity().getSharedPreferences("MyPref", 0); // 0 - for private mode
+                    SharedPreferences.Editor editor = pref.edit();
+
+                    editor.putString("username",reg_no);
+                    editor.putString("user_role",user_role);
+                    editor.commit();
+
+                    if(user_role.equals("user"))
+                    {
+                        Fragment fragment = new HomeFragment();
+                        fragmentManager = getFragmentManager();
+                        fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                    else{
+                        Fragment fragment = new HomeFragment();
+                        fragmentManager = getFragmentManager();
+                        fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+
                 }
                 //Toast.makeText(getActivity(), String.format("%s : %s",response.getString("message"),response.getString("code")), Toast.LENGTH_LONG).show();
             } catch (Exception e) {

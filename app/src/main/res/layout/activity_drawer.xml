@@ -145,7 +145,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:gravity="start"
-                        android:text="Admin"
+                        android:text="Login"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
@@ -153,6 +153,40 @@
 
                 <RelativeLayout
                     android:id="@+id/adminRel"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/black" />
+
+                <LinearLayout
+                    android:id="@+id/donation_request"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/donation_post" />
+
+                    <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Regular
+                        android:id="@+id/DonationRequestText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="start"
+                        android:text="Donation Request"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/donationRequestRel"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginLeft="50dp"
