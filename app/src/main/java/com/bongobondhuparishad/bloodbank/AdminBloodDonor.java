@@ -1,6 +1,9 @@
 package com.bongobondhuparishad.bloodbank;
 
 import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class AdminBloodDonor implements Serializable {
     private String name;
@@ -21,6 +24,17 @@ public class AdminBloodDonor implements Serializable {
     public AdminBloodDonor(String name,  int id, String mobile, String blood_group,
                            String email, String division, String last_donation_date, String reg_no,
                            String comment, String emergency_contact, boolean is_approved, boolean has_donated, String details) {
+        final SimpleDateFormat out_format = new SimpleDateFormat("dd/MM/yyyy");
+        final SimpleDateFormat in_format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+        Date input_date= new Date();
+
+        try {
+            input_date = in_format.parse(last_donation_date==null? "01-01-2020":last_donation_date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
         this.name = name;
         this.details = details;
         this.id = id;
@@ -28,7 +42,7 @@ public class AdminBloodDonor implements Serializable {
         this.blood_group = blood_group;
         this.email = email==null? "":email;
         this.division = division;
-        this.last_donation_date = last_donation_date==null? "1-Jan-2000":last_donation_date;
+        this.last_donation_date = out_format.format(input_date);
         this.reg_no = reg_no;
         this.comment = comment==null? "":comment;
         this.emergency_contact = emergency_contact==null? mobile:emergency_contact;
@@ -93,7 +107,7 @@ public class AdminBloodDonor implements Serializable {
     }
 
     public String getLast_donation_date() {
-        return last_donation_date;
+        return last_donation_date==null? "1-Jan-2000":last_donation_date;
     }
 
     public void setLast_donation_date(String last_donation_date) {

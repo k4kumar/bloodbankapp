@@ -1,6 +1,10 @@
 package com.bongobondhuparishad.bloodbank;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -20,6 +24,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -36,6 +41,8 @@ import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link LoginFragment#newInstance} factory method to
@@ -51,6 +58,7 @@ public class LoginFragment extends Fragment {
     private EditText txtRegno;
     private EditText txtPassword;
 
+    private TextView tvRegister;
     private MaterialButton btnLogin;
 
     // TODO: Rename and change types of parameters
@@ -100,6 +108,7 @@ public class LoginFragment extends Fragment {
 
         txtPassword = (EditText) view.findViewById(R.id.input_password);
         txtRegno = (EditText) view.findViewById(R.id.input_regno);
+        tvRegister = (TextView) view.findViewById(R.id.tv_register);
 
         btnLogin = (MaterialButton) view.findViewById(R.id.btn_login);
 
@@ -107,7 +116,26 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 Log.d("login","Inside onviewcreated");
-                new PostAsyncTask().execute();
+                if(txtPassword.getText().length()>0 && txtRegno.getText().length()>0)
+                {
+                    new PostAsyncTask().execute();
+                }
+                else{
+                    Toast.makeText(getActivity(),"Please provide username and password",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        tvRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager;
+                FragmentTransaction fragmentTransaction;
+                Fragment fragment = new AddDonorFragment();
+                fragmentManager = getFragmentManager();
+                fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
 
             }
         });
@@ -124,8 +152,8 @@ public class LoginFragment extends Fragment {
         @Override
         protected JSONObject doInBackground(String... params) {
             Map postData = new HashMap<>();
-            postData.put("password",txtPassword.getText());
-            postData.put("username",txtRegno.getText());
+            postData.put("Password",txtPassword.getText());
+            postData.put("UserName",txtRegno.getText());
             return post("http://bloodbank.manchitro.info/api/v1/admin/login",postData);
         }
 
@@ -137,17 +165,20 @@ public class LoginFragment extends Fragment {
             FragmentManager fragmentManager;
             FragmentTransaction fragmentTransaction;
             try {
-                JSONObject data = response.getJSONObject("data");
-                JSONObject user = data.getJSONObject("user");
-                Log.i("response:",user.getString("role"));
                 if(response.getString("code").equals("404"))
                 {
                     Log.i("info", "inside 404");
                     Toast.makeText(getActivity(), "Reg no. and password combination wrong", Toast.LENGTH_LONG).show();
                 }
                 else{
+                    JSONObject data = response.getJSONObject("data");
+                    JSONObject user = data.getJSONObject("user");
+                    Log.i("response:",user.getString("role"));
                     String user_role = user.getString("role");
                     String reg_no = user.getString("username");
+                    String name = user.getString("name");
+                    int user_id = user.getInt("userId");
+                    Log.d(TAG, "user id: "+user_id);
                     Log.i("info", "inside success");
 
                     SharedPreferences pref = getActivity().getSharedPreferences("MyPref", 0); // 0 - for private mode
@@ -155,22 +186,19 @@ public class LoginFragment extends Fragment {
 
                     editor.putString("username",reg_no);
                     editor.putString("user_role",user_role);
+                    editor.putInt("user_id",user_id);
+                    editor.putString("name", name);
+
                     editor.commit();
 
                     if(user_role.equals("user"))
                     {
-                        Fragment fragment = new HomeFragment();
-                        fragmentManager = getFragmentManager();
-                        fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+                        Intent t = new Intent(getContext(), MainActivity.class);
+                        startActivity(t);
                     }
                     else{
-                        Fragment fragment = new HomeFragment();
-                        fragmentManager = getFragmentManager();
-                        fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
+                        Intent t = new Intent(getContext(), MainActivity.class);
+                        startActivity(t);
                     }
 
                 }

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardElevation="5dp"
+        android:orientation="vertical"
+        app:cardCornerRadius="3dp">
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="85dp">
+
+            <ImageView
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:id="@+id/imv_blood_group"
+                android:src="@drawable/a_positive"></ImageView>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold
+                    android:id="@+id/textViewName"
+                    android:text="Donor Name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black">
+                </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold>
+                <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Medium
+                    android:id="@+id/textViewPositiveDate"
+                    android:text="Positive Date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black">
+                </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Medium>
+                <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Medium
+                    android:id="@+id/textViewRecoveryDate"
+                    android:text="Recovery Date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black">
+                </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Medium>
+                <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Medium
+                    android:id="@+id/textViewContactNumber"
+                    android:text="Contact Number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:autoLink="phone"
+                    android:textColorLink="@color/colorPrimary">
+                </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Medium>
+            </TableLayout>
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

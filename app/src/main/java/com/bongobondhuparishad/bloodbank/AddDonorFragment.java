@@ -2,6 +2,8 @@ package com.bongobondhuparishad.bloodbank;
 
 import android.app.DatePickerDialog;
 import androidx.appcompat.app.AlertDialog;
+
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -14,15 +16,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.button.MaterialButton;
@@ -54,7 +60,7 @@ public class AddDonorFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    private static final String Tag = "AddDonorFragment";
+    private static final String Tag = "Add Donor Fragment";
     private DatePickerDialog.OnDateSetListener onDateSetListener;
 
     private EditText txtName,txtRegNo,txtDivision,txtMobileNo,txtEmergencyContact,txtLastDonationDate,txtEmail,txtNickname,
@@ -122,7 +128,6 @@ public class AddDonorFragment extends Fragment {
         bloodDonorAdapter.setDropDownViewResource(R.layout.drpdn_bloodgroup);
         spinnerBloodGroup.setAdapter(bloodDonorAdapter);
 
-
         btnSubmit = (MaterialButton) view.findViewById(R.id.btn_submit);
 
         txtLastDonationDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -150,25 +155,17 @@ public class AddDonorFragment extends Fragment {
 
         });
 
-        txtLastDonationDate.setOnClickListener(new View.OnClickListener() {
+        txtEmergencyContact.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
-            public void onClick(View view) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
-
-                DatePickerDialog dialog = new DatePickerDialog(
-                        getActivity(),
-                        R.style.DialogTheme,
-                        onDateSetListener,
-                        year,month,day);
-
-                dialog.show();
+            public boolean onEditorAction(TextView textView, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                    textView.clearFocus();
+                    spinnerBloodGroup.requestFocus();
+                    spinnerBloodGroup.performClick();
+                }
+                return true;
             }
-
         });
-
 
         onDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -190,7 +187,16 @@ public class AddDonorFragment extends Fragment {
                 String confirm_password = txtConfirmPassword.getText().toString();
                 if (password.equals(confirm_password))
                 {
-                    new AddDonorFragment.PostAsyncTask().execute();
+                    if(txtName.getText().length()>0 && txtDivision.getText().length()>0 && txtRegNo.getText().length()>0
+                    && txtMobileNo.getText().length()>0 && txtEmergencyContact.getText().length()>0 && spinnerBloodGroup.getSelectedItem().toString().length()>0
+                    && txtEmail.getText().length()>0 && txtPassword.getText().length()>0 && txtConfirmPassword.getText().length()>0)
+                    {
+                        new AddDonorFragment.PostAsyncTask().execute();
+                    }
+                    else
+                    {
+                        Toast.makeText(getActivity(),"Please fill out all the star marked fields", Toast.LENGTH_LONG).show();
+                    }
                 }
                 else{
                     Toast.makeText(getActivity(),"Password and Confirm password do not match",Toast.LENGTH_LONG).show();
@@ -253,7 +259,7 @@ public class AddDonorFragment extends Fragment {
                 }
                 else{
                     Log.i("info", "inside success");
-                    Fragment fragment = new BloodDonorFragment();
+                    Fragment fragment = new LoginFragment();
                     fragmentManager = getFragmentManager();
                     fragmentTransaction=fragmentManager.beginTransaction().replace(R.id.fragmentContainer,fragment);
                     fragmentTransaction.addToBackStack(null);
@@ -318,4 +324,5 @@ public class AddDonorFragment extends Fragment {
             return jsonObject;
         }
     }
+
 }

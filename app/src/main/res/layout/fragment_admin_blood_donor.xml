@@ -12,26 +12,6 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            app:cardElevation="5dp"
-            android:orientation="vertical"
-            app:cardCornerRadius="3dp"
-            >
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/blood_donation_chart"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
-
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

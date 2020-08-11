@@ -11,15 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="New Donor"
-            android:textAlignment="center"
-            android:textSize="20dp"
-            android:textColor="@color/colorPrimary">
-        </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -32,7 +23,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:hint="Reg. Number/Mobile"/>
+                android:hint="Reg. Number *"
+                android:textColorHint="@color/colorPrimary"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -46,7 +38,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="Name" />
+                android:hint="Name *" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -74,7 +66,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPersonName"
-                android:hint="Division"/>
+                android:hint="Division *"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -88,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:hint="Mobile Number"/>
+                android:hint="Mobile Number *"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -102,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:hint="Emergency Contact Number"/>
+                android:hint="Emergency Contact Number *"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Spinner
@@ -113,6 +105,8 @@
             android:paddingLeft="10dp"
             android:paddingBottom="5dp"
             android:paddingTop="5dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             />
 
         <RelativeLayout
@@ -147,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textEmailAddress"
-                android:hint="Email"/>
+                android:hint="Email *"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -161,7 +155,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Password"/>
+                android:hint="Password *"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -176,7 +170,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="textPassword"
-                android:hint="Confirm Password"/>
+                android:hint="Confirm Password *"/>
         </com.google.android.material.textfield.TextInputLayout>
 
 

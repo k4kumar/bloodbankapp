@@ -110,7 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:gravity="start"
-                        android:text="Blood Donors"
+                        android:text="Donor List"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
@@ -137,7 +137,7 @@
                         android:layout_width="32dp"
                         android:layout_height="32dp"
                         android:layout_marginLeft="10dp"
-                        android:src="@drawable/admin" />
+                        android:src="@drawable/login" />
 
                     <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Regular
                         android:id="@+id/AdminText"
@@ -161,7 +161,41 @@
                     android:background="@color/black" />
 
                 <LinearLayout
-                    android:id="@+id/donation_request"
+                    android:id="@+id/profile"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/profile" />
+
+                    <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Regular
+                        android:id="@+id/ProfileText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="start"
+                        android:text="Profile"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/profileRel"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/black" />
+
+                <LinearLayout
+                    android:id="@+id/add_donation_request"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -174,19 +208,123 @@
                         android:src="@drawable/donation_post" />
 
                     <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Regular
-                        android:id="@+id/DonationRequestText"
+                        android:id="@+id/AddDonationRequestText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="15dp"
                         android:gravity="start"
-                        android:text="Donation Request"
+                        android:text="Add Donation Post"
                         android:textColor="@color/black"
                         android:textSize="18sp" />
 
                 </LinearLayout>
 
                 <RelativeLayout
-                    android:id="@+id/donationRequestRel"
+                    android:id="@+id/addDonationRequestRel"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/black" />
+
+
+                <LinearLayout
+                    android:id="@+id/donation_requests"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/donation_requests" />
+
+                    <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Regular
+                        android:id="@+id/DonationRequestsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="start"
+                        android:text="Donation Requests"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/donationRequestsRel"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/black" />
+
+
+                <LinearLayout
+                    android:id="@+id/add_plasma_donor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/plasma_donation" />
+
+                    <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Regular
+                        android:id="@+id/AddPlasmaDonorText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="start"
+                        android:text="Add Plasma Donor"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/addPlasmaDonorRel"
+                    android:layout_width="match_parent"
+                    android:layout_height="2dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:background="@color/black" />
+
+                <LinearLayout
+                    android:id="@+id/plasma_donors"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:layout_marginLeft="10dp"
+                        android:src="@drawable/plasma_donors" />
+
+                    <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Regular
+                        android:id="@+id/PlasmaDonorsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:gravity="start"
+                        android:text="Plasma Donors"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/plasmaDonorsRel"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:layout_marginLeft="50dp"
