@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        app:cardElevation="5dp"
+        android:orientation="vertical"
+        app:cardCornerRadius="3dp">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/txtPosterName"
+                android:textColor="@color/colorPrimary"
+                android:text="Kumarjit Dutta"
+                android:textSize="19sp"
+                android:textAlignment="center">
+            </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold>
+            
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/colorPrimary">
+                <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Regular
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Request Details"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"
+                    android:textAlignment="center">
+                </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Regular>
+            </androidx.cardview.widget.CardView>
+            
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:id="@+id/imv_blood_group"
+                        android:src="@drawable/a_positive"></ImageView>
+
+                    <TableLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <TableRow>
+                            <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold
+                                android:id="@+id/txtDate"
+                                android:text="Date"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:padding="3dp">
+                            </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold>
+                        </TableRow>
+                        <TableRow>
+                            <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold
+                                android:id="@+id/txtDistrict"
+                                android:text="District"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:padding="3dp">
+                            </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold>
+                        </TableRow>
+                        <TableRow>
+                            <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold
+                                android:id="@+id/txtHospital"
+                                android:text="Hospital"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:padding="3dp">
+                            </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold>
+                        </TableRow>
+                        <TableRow>
+                            <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold
+                                android:id="@+id/txtContact"
+                                android:text="Contact"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/black"
+                                android:autoLink="phone"
+                                android:linksClickable="true"
+                                android:textColorLink="@color/colorPrimary"
+                                android:padding="3dp">
+                            </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Bold>
+                        </TableRow>
+                    </TableLayout>
+
+                </LinearLayout>
+                
+            </androidx.cardview.widget.CardView>
+            
+            <com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Medium
+                android:id="@+id/txtDetails"
+                android:text="Donation Details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black">
+            </com.bongobondhuparishad.bloodbank.customfonts.MyTextView_Roboto_Medium>
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

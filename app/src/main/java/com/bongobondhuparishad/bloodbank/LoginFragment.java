@@ -118,7 +118,17 @@ public class LoginFragment extends Fragment {
                 Log.d("login","Inside onviewcreated");
                 if(txtPassword.getText().length()>0 && txtRegno.getText().length()>0)
                 {
-                    new PostAsyncTask().execute();
+                    ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+                    if(networkInfo==null||!networkInfo.isConnected()||!networkInfo.isAvailable())
+                    {
+                        Toast.makeText(getActivity(),"Please enable internet connection",Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        new PostAsyncTask().execute();
+                    }
+
                 }
                 else{
                     Toast.makeText(getActivity(),"Please provide username and password",Toast.LENGTH_LONG).show();

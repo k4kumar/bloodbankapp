@@ -3,6 +3,8 @@ package com.bongobondhuparishad.bloodbank;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -182,7 +184,17 @@ public class AddDonationPostFragment extends Fragment {
                         spinnerBloodGroup.getSelectedItem().toString().length() > 0 && txtHospital.getText().length() > 0 &&
                         spinnerDistrict.getSelectedItem().toString().length()>0)
                 {
-                    new AddDonationPostFragment.PostAsyncTask(getContext()).execute();
+                    ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                    NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+                    if(networkInfo==null||!networkInfo.isConnected()||!networkInfo.isAvailable())
+                    {
+                        Toast.makeText(getActivity(),"Please enable internet connection",Toast.LENGTH_LONG).show();
+                    }
+                    else{
+                        new AddDonationPostFragment.PostAsyncTask(getContext()).execute();
+                    }
+
                 }
                 else{
                     Toast.makeText(getActivity(),"Please fill out all star marked fields",Toast.LENGTH_LONG).show();

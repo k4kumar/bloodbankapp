@@ -3,6 +3,9 @@ package com.bongobondhuparishad.bloodbank;
 import android.annotation.SuppressLint;
 import android.app.LauncherActivity;
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -118,7 +121,17 @@ public class AdminBloodDonorFragment extends Fragment implements AdminBloodDonor
 
         listItems = new ArrayList<AdminBloodDonor>();
         url = "http://bloodbank.manchitro.info/api/v1/admin/blooddonors";
-        loadRecyclerViewData(this);
+
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if(networkInfo==null||!networkInfo.isConnected()||!networkInfo.isAvailable())
+        {
+            Toast.makeText(getActivity(),"Please enable internet connection and reopen the page",Toast.LENGTH_LONG).show();
+        }
+        else{
+            loadRecyclerViewData(this);
+        }
 
         searchFilter.addTextChangedListener(new TextWatcher() {
             @Override

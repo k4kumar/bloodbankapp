@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -191,7 +193,16 @@ public class AddDonorFragment extends Fragment {
                     && txtMobileNo.getText().length()>0 && txtEmergencyContact.getText().length()>0 && spinnerBloodGroup.getSelectedItem().toString().length()>0
                     && txtEmail.getText().length()>0 && txtPassword.getText().length()>0 && txtConfirmPassword.getText().length()>0)
                     {
-                        new AddDonorFragment.PostAsyncTask().execute();
+                        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+                        if(networkInfo==null||!networkInfo.isConnected()||!networkInfo.isAvailable())
+                        {
+                            Toast.makeText(getActivity(),"Please enable internet connection",Toast.LENGTH_LONG).show();
+                        }
+                        else{
+                            new AddDonorFragment.PostAsyncTask().execute();
+                        }
                     }
                     else
                     {

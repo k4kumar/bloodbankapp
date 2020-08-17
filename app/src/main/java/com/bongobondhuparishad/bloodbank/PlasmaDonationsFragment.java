@@ -1,6 +1,9 @@
 package com.bongobondhuparishad.bloodbank;
 
 import android.app.ProgressDialog;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -108,7 +111,16 @@ public class PlasmaDonationsFragment extends Fragment implements PlasmaDonorAdap
 
         listItems = new ArrayList<PlasmaDonor>();
         url = "http://bloodbank.manchitro.info/api/v1/plasma_donors";
-        loadRecyclerViewData(this);
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if(networkInfo==null||!networkInfo.isConnected()||!networkInfo.isAvailable())
+        {
+            Toast.makeText(getActivity(),"Please enable internet connection and retry",Toast.LENGTH_LONG).show();
+        }
+        else{
+            loadRecyclerViewData(this);
+        }
 
         searchFilter.addTextChangedListener(new TextWatcher() {
             @Override
