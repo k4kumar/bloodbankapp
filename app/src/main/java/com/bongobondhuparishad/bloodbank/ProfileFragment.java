@@ -136,7 +136,7 @@ public class ProfileFragment extends Fragment {
 
         String username = prefs.getString("username","15099");
 
-        url = "http://bloodbank.manchitro.info/api/v1/blood_donor/get/"+username;
+        url = getResources().getString(R.string.api_web_address)+"api/v1/blood_donor/get/"+username;
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
@@ -223,7 +223,7 @@ public class ProfileFragment extends Fragment {
             postData.put("LastDonatedDate",txtLastDonationDate.getText());
             postData.put("EmergencyContact",txtEmergencyContact.getText());
             postData.put("Password",txtPassword.getText());
-            return post("http://bloodbank.manchitro.info/api/v1/blood_donor/update",postData);
+            return post(getResources().getString(R.string.api_web_address)+"api/v1/blood_donor/update",postData);
         }
 
         @Override

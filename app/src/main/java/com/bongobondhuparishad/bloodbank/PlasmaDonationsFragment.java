@@ -110,7 +110,7 @@ public class PlasmaDonationsFragment extends Fragment implements PlasmaDonorAdap
         searchFilter = (EditText) view.findViewById(R.id.searchFilter);
 
         listItems = new ArrayList<PlasmaDonor>();
-        url = "http://bloodbank.manchitro.info/api/v1/plasma_donors";
+        url = getResources().getString(R.string.api_web_address)+"api/v1/plasma_donors";
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
 

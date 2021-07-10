@@ -240,7 +240,7 @@ public class AddDonorFragment extends Fragment {
             postData.put("NickName",txtNickname.getText());
             postData.put("Username",txtRegNo.getText());
             postData.put("Password",txtPassword.getText());
-            return post("http://bloodbank.manchitro.info/api/v1/blooddonor/registration",postData);
+            return post(getResources().getString(R.string.api_web_address)+"api/v1/blooddonor/registration",postData);
         }
 
         @Override

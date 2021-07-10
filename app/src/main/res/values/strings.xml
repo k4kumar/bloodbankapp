@@ -81,6 +81,7 @@
         <item>Satkhira</item>
     </string-array>
 
+    <string name="api_web_address">http://www.bloodbond.info/</string>
     <string name="twitterUsername">\@joeytribbiani</string>
 
 </resources>

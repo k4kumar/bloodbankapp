@@ -157,7 +157,7 @@ public class AdminDonorDetailsFragment extends Fragment {
             Log.d("Approve:", "doInBackground: "+name.getTag());
             Map postData = new HashMap<>();
             postData.put("id",name.getTag());
-            return post("http://bloodbank.manchitro.info/api/v1/admin/blooddonor/approve",postData);
+            return post(getResources().getString(R.string.api_web_address)+"api/v1/admin/blooddonor/approve",postData);
         }
 
         @Override

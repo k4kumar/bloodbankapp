@@ -235,7 +235,7 @@ public class AddDonationPostFragment extends Fragment {
                 postData.put("BloodGroup", spinnerBloodGroup.getSelectedItem().toString());
                 postData.put("Details", txtDetails.getText());
                 postData.put("UserId", user_id);
-                return post("http://bloodbank.manchitro.info/api/v1/donation_post/add", postData);
+                return post(getResources().getString(R.string.api_web_address)+"api/v1/donation_post/add", postData);
             }
 
             @Override

@@ -126,6 +126,7 @@ public class LoginFragment extends Fragment {
                         Toast.makeText(getActivity(),"Please enable internet connection",Toast.LENGTH_LONG).show();
                     }
                     else{
+                        Log.d("Process","Everything is fine upto now");
                         new PostAsyncTask().execute();
                     }
 
@@ -164,26 +165,32 @@ public class LoginFragment extends Fragment {
             Map postData = new HashMap<>();
             postData.put("Password",txtPassword.getText());
             postData.put("UserName",txtRegno.getText());
-            return post("http://bloodbank.manchitro.info/api/v1/admin/login",postData);
+            return post(getResources().getString(R.string.api_web_address)+"api/v1/admin/login",postData);
         }
 
         @Override
         protected void onPostExecute(JSONObject response) {
             super.onPostExecute(response);
+            System.out.print("Response object:");
+            System.out.println(response);
+
             //All your UI operation can be performed here
             //Response string can be converted to JSONObject/JSONArray like
             FragmentManager fragmentManager;
             FragmentTransaction fragmentTransaction;
+            Log.d("response","Inside on post execute");
             try {
+                Log.d("response", response.getString("code"));
                 if(response.getString("code").equals("404"))
                 {
-                    Log.i("info", "inside 404");
+                    Log.d("response", "inside 404");
                     Toast.makeText(getActivity(), "Reg no. and password combination wrong", Toast.LENGTH_LONG).show();
                 }
                 else{
+                    Log.d("response","else");
                     JSONObject data = response.getJSONObject("data");
                     JSONObject user = data.getJSONObject("user");
-                    Log.i("response:",user.getString("role"));
+                    Log.d("response:",user.getString("role"));
                     String user_role = user.getString("role");
                     String reg_no = user.getString("username");
                     String name = user.getString("name");
@@ -214,6 +221,7 @@ public class LoginFragment extends Fragment {
                 }
                 //Toast.makeText(getActivity(), String.format("%s : %s",response.getString("message"),response.getString("code")), Toast.LENGTH_LONG).show();
             } catch (Exception e) {
+                Log.d("response","Caught something");
                 e.printStackTrace();
                 Toast.makeText(getActivity(), String.format("%s","Something went wrong!!!!!!"), Toast.LENGTH_LONG).show();
 

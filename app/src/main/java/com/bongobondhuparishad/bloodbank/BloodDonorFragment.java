@@ -108,7 +108,7 @@ public class BloodDonorFragment extends Fragment implements BloodDonorAdapter.On
         searchFilter = (EditText) view.findViewById(R.id.searchFilter);
 
         listItems = new ArrayList<AdminBloodDonor>();
-        url = "http://bloodbank.manchitro.info/api/v1/blooddonors";
+        url = getResources().getString(R.string.api_web_address)+"/api/v1/blooddonors";
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();

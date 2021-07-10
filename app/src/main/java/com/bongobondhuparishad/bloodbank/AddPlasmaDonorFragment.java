@@ -229,7 +229,7 @@ public class AddPlasmaDonorFragment extends Fragment {
             postData.put("RecoveryDate",txtRecoveryDate.getText());
             postData.put("HasDonated",false);
             postData.put("IsVerified",false);
-            return post("http://bloodbank.manchitro.info/api/v1/plasma_donor/add",postData);
+            return post(getResources().getString(R.string.api_web_address)+"api/v1/plasma_donor/add",postData);
         }
 
         @Override

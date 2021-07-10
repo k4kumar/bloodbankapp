@@ -104,7 +104,7 @@ public class DonationPostsFragment extends Fragment{
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         listItems = new ArrayList<DonationPost>();
-        url = "http://bloodbank.manchitro.info/api/v1/donation_posts";
+        url = getResources().getString(R.string.api_web_address)+"api/v1/donation_posts";
 
         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
