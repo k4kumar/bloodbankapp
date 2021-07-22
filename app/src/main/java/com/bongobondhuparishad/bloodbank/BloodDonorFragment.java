@@ -2,6 +2,7 @@ package com.bongobondhuparishad.bloodbank;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -110,17 +112,18 @@ public class BloodDonorFragment extends Fragment implements BloodDonorAdapter.On
         listItems = new ArrayList<AdminBloodDonor>();
         url = getResources().getString(R.string.api_web_address)+"/api/v1/blooddonors";
 
-        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+//
+//        if(networkInfo==null||!networkInfo.isConnected()||!networkInfo.isAvailable())
+//        {
+//            Toast.makeText(getActivity(),"Please enable internet connection and reopen the page",Toast.LENGTH_LONG).show();
+//        }
+//        else{
+//            loadRecyclerViewData(this);
+//        }
 
-        if(networkInfo==null||!networkInfo.isConnected()||!networkInfo.isAvailable())
-        {
-            Toast.makeText(getActivity(),"Please enable internet connection and reopen the page",Toast.LENGTH_LONG).show();
-        }
-        else{
-            loadRecyclerViewData(this);
-        }
-
+        loadRecyclerViewData(this);
 
         searchFilter.addTextChangedListener(new TextWatcher() {
             @Override
@@ -144,60 +147,99 @@ public class BloodDonorFragment extends Fragment implements BloodDonorAdapter.On
         final ProgressDialog progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Loading data...");
         progressDialog.show();
+        final DatabaseHelper helper = new DatabaseHelper(getActivity());
+        String result = helper.get();
+        if(result.length()>1){
+            try {
+                JSONArray array = new JSONArray(result);
+                for(int i = 0;i<array.length();i++)
+                {
+                    JSONObject o = array.getJSONObject(i);
+                    AdminBloodDonor adminBloodDonor = new AdminBloodDonor(
+                            o.getString("name"),
+                            o.getInt("id"),
+                            o.getString("mobile"),
+                            o.getString("bloodGroup"),
+                            o.getString("email"),
+                            o.getString("division"),
+                            o.getString("lastDonatedDate"),
+                            o.getString("regNo"),
+                            o.getString("comment"),
+                            o.getString("emergencyContact"),
+                            o.getBoolean("isVerified"),
+                            o.getBoolean("hasDonated"),
+                            o.getString("bloodGroup")+"\n"+o.getString("division")
+                    );
 
-        StringRequest stringRequest = new StringRequest(Request.Method.GET,
-                url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        progressDialog.dismiss();
-                        try{
-                            JSONObject jsonObject = new JSONObject(response);
-                            JSONObject data = jsonObject.getJSONObject("data");
-                            JSONArray array = data.getJSONArray("blooddonors");
+                    listItems.add(adminBloodDonor);
+                }
 
-                            for(int i = 0;i<array.length();i++)
+                adapter = new BloodDonorAdapter(listItems,getActivity(),onDonorListener);
+                recyclerView.setAdapter(adapter);
+                progressDialog.dismiss();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+        else{
+            StringRequest stringRequest = new StringRequest(Request.Method.GET,
+                    url,
+                    new Response.Listener<String>() {
+                        @Override
+                        public void onResponse(String response) {
+                            progressDialog.dismiss();
+                            try{
+                                JSONObject jsonObject = new JSONObject(response);
+                                JSONObject data = jsonObject.getJSONObject("data");
+                                JSONArray array = data.getJSONArray("blooddonors");
+                                helper.insert(array.toString());
+
+                                for(int i = 0;i<array.length();i++)
+                                {
+                                    JSONObject o = array.getJSONObject(i);
+                                    AdminBloodDonor adminBloodDonor = new AdminBloodDonor(
+                                            o.getString("name"),
+                                            o.getInt("id"),
+                                            o.getString("mobile"),
+                                            o.getString("bloodGroup"),
+                                            o.getString("email"),
+                                            o.getString("division"),
+                                            o.getString("lastDonatedDate"),
+                                            o.getString("regNo"),
+                                            o.getString("comment"),
+                                            o.getString("emergencyContact"),
+                                            o.getBoolean("isVerified"),
+                                            o.getBoolean("hasDonated"),
+                                            o.getString("bloodGroup")+"\n"+o.getString("division")
+                                    );
+
+                                    listItems.add(adminBloodDonor);
+                                }
+
+                                adapter = new BloodDonorAdapter(listItems,getActivity(),onDonorListener);
+                                recyclerView.setAdapter(adapter);
+                            }catch (Exception e)
                             {
-                                JSONObject o = array.getJSONObject(i);
-                                AdminBloodDonor adminBloodDonor = new AdminBloodDonor(
-                                        o.getString("name"),
-                                        o.getInt("id"),
-                                        o.getString("mobile"),
-                                        o.getString("bloodGroup"),
-                                        o.getString("email"),
-                                        o.getString("division"),
-                                        o.getString("lastDonatedDate"),
-                                        o.getString("regNo"),
-                                        o.getString("comment"),
-                                        o.getString("emergencyContact"),
-                                        o.getBoolean("isVerified"),
-                                        o.getBoolean("hasDonated"),
-                                        o.getString("bloodGroup")+"\n"+o.getString("division")
-                                );
-
-                                listItems.add(adminBloodDonor);
+                                e.printStackTrace();
                             }
 
-                            adapter = new BloodDonorAdapter(listItems,getActivity(),onDonorListener);
-                            recyclerView.setAdapter(adapter);
-                        }catch (Exception e)
-                        {
-                            e.printStackTrace();
+
                         }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            progressDialog.dismiss();
+                            Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+            RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
+            requestQueue.add(stringRequest);
+        }
 
 
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        progressDialog.dismiss();
-                        Toast.makeText(getActivity(),error.getMessage(),Toast.LENGTH_LONG).show();
-                    }
-                });
-
-        RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
-        requestQueue.add(stringRequest);
 
     }
 
