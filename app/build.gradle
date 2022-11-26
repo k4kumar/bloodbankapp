@@ -9,9 +9,9 @@ android {
     defaultConfig {
         applicationId "com.bongobondhuparishad.bloodbank"
         minSdkVersion 19
-        targetSdkVersion 30
-        versionCode 5
-        versionName "1.4"
+        targetSdkVersion 31
+        versionCode 7
+        versionName "1.6"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

@@ -53,6 +53,7 @@ public class BloodDonorFragment extends Fragment implements BloodDonorAdapter.On
     private String mParam1;
     private String mParam2;
     private String url;
+    private boolean isConnected = false;
 
     private static final String TAG = "Blood Donor Fragment";
 
@@ -112,16 +113,16 @@ public class BloodDonorFragment extends Fragment implements BloodDonorAdapter.On
         listItems = new ArrayList<AdminBloodDonor>();
         url = getResources().getString(R.string.api_web_address)+"/api/v1/blooddonors";
 
-//        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-//        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
-//
-//        if(networkInfo==null||!networkInfo.isConnected()||!networkInfo.isAvailable())
-//        {
-//            Toast.makeText(getActivity(),"Please enable internet connection and reopen the page",Toast.LENGTH_LONG).show();
-//        }
-//        else{
-//            loadRecyclerViewData(this);
-//        }
+        ConnectivityManager connectivityManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        if(networkInfo==null||!networkInfo.isConnected()||!networkInfo.isAvailable())
+        {
+            isConnected = false;
+        }
+        else{
+            isConnected = true;
+        }
 
         loadRecyclerViewData(this);
 
@@ -149,7 +150,7 @@ public class BloodDonorFragment extends Fragment implements BloodDonorAdapter.On
         progressDialog.show();
         final DatabaseHelper helper = new DatabaseHelper(getActivity());
         String result = helper.get();
-        if(result.length()>1){
+        if(result.length()>1 && isConnected == false){
             try {
                 JSONArray array = new JSONArray(result);
                 for(int i = 0;i<array.length();i++)

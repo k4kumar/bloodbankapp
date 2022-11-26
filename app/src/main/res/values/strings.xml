@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Rupali Blood Bond</string>
+    <string name="app_name">Spondon</string>
     <string name="hello_blank_fragment">This is the main fragment</string>
 
     <string-array name="bloodgroups">
@@ -81,7 +81,7 @@
         <item>Satkhira</item>
     </string-array>
 
-    <string name="api_web_address">http://www.bloodbond.info/</string>
+    <string name="api_web_address">http://www.novoicedeveloper.xyz/</string>
     <string name="twitterUsername">\@joeytribbiani</string>
 
 </resources>

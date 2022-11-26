@@ -54,14 +54,14 @@ public class AdminBloodDonorAdapter extends RecyclerView.Adapter<AdminBloodDonor
 
         holder.txtViewLastDonationDate.setText(listItem.getLast_donation_date());
 
-        if(listItem.getBlood_group().equals("O(+ve)")) holder.imvbloodGroup.setImageResource(R.drawable.o_positive);
-        else if(listItem.getBlood_group().equals("A(+ve)")) holder.imvbloodGroup.setImageResource(R.drawable.a_positive);
-        else if(listItem.getBlood_group().equals("AB(+ve)")) holder.imvbloodGroup.setImageResource(R.drawable.ab_positive);
-        else if(listItem.getBlood_group().equals("B(+ve)")) holder.imvbloodGroup.setImageResource(R.drawable.b_positive);
-        else if(listItem.getBlood_group().equals("A(-ve)")) holder.imvbloodGroup.setImageResource(R.drawable.neg_a);
-        else if(listItem.getBlood_group().equals("AB(-ve)")) holder.imvbloodGroup.setImageResource(R.drawable.neg_ab);
-        else if(listItem.getBlood_group().equals("B(-ve)")) holder.imvbloodGroup.setImageResource(R.drawable.neg_b);
-        else if(listItem.getBlood_group().equals("O(-ve)")) holder.imvbloodGroup.setImageResource(R.drawable.neg_o);
+        if(listItem.getBlood_group().equals("O(+ve)") || listItem.getBlood_group().equals("o(+ve)") || listItem.getBlood_group().equals("O+") || listItem.getBlood_group().equals("o+")) holder.imvbloodGroup.setImageResource(R.drawable.o_positive);
+        else if(listItem.getBlood_group().equals("A(+ve)") || listItem.getBlood_group().equals("A+") || listItem.getBlood_group().equals("a(+ve)") || listItem.getBlood_group().equals("a+")) holder.imvbloodGroup.setImageResource(R.drawable.a_positive);
+        else if(listItem.getBlood_group().equals("AB(+ve)") || listItem.getBlood_group().equals("AB+") || listItem.getBlood_group().equals("ab(+ve)") || listItem.getBlood_group().equals("ab+")) holder.imvbloodGroup.setImageResource(R.drawable.ab_positive);
+        else if(listItem.getBlood_group().equals("B(+ve)") || listItem.getBlood_group().equals("B+") || listItem.getBlood_group().equals("b(+ve)") || listItem.getBlood_group().equals("b+")) holder.imvbloodGroup.setImageResource(R.drawable.b_positive);
+        else if(listItem.getBlood_group().equals("A(-ve)") || listItem.getBlood_group().equals("A-") || listItem.getBlood_group().equals("a(-ve)") || listItem.getBlood_group().equals("a-")) holder.imvbloodGroup.setImageResource(R.drawable.neg_a);
+        else if(listItem.getBlood_group().equals("AB(-ve)") || listItem.getBlood_group().equals("AB-") || listItem.getBlood_group().equals("ab(-ve)") || listItem.getBlood_group().equals("ab-")) holder.imvbloodGroup.setImageResource(R.drawable.neg_ab);
+        else if(listItem.getBlood_group().equals("B(-ve)") || listItem.getBlood_group().equals("B-") || listItem.getBlood_group().equals("b(-ve)") || listItem.getBlood_group().equals("b-")) holder.imvbloodGroup.setImageResource(R.drawable.neg_b);
+        else if(listItem.getBlood_group().equals("O(-ve)") || listItem.getBlood_group().equals("O-") || listItem.getBlood_group().equals("o(-ve)") || listItem.getBlood_group().equals("o-")) holder.imvbloodGroup.setImageResource(R.drawable.neg_o);
 
         if(!listItem.is_approved())
         {
@@ -97,7 +97,16 @@ public class AdminBloodDonorAdapter extends RecyclerView.Adapter<AdminBloodDonor
             }else{
                 String filterPattern = charSequence.toString().toLowerCase().trim();
                 for(AdminBloodDonor item: listItemsFull) {
-                    if(item.getName().toLowerCase().contains(filterPattern) || item.getReg_no().contains(filterPattern) || item.getDetails().toLowerCase().contains(filterPattern))
+                    if(filterPattern.equals("O(+ve)") || filterPattern.equals("o(+ve)") || filterPattern.equals("O+") || filterPattern.equals("o+")) filterPattern = "O(+ve)";
+                    else if(filterPattern.equals("A(+ve)") || filterPattern.equals("A+") || filterPattern.equals("a(+ve)") || filterPattern.equals("a+")) filterPattern = "A(+ve)";
+                    else if(filterPattern.equals("AB(+ve)") || filterPattern.equals("AB+") || filterPattern.equals("ab(+ve)") || filterPattern.equals("ab+")) filterPattern = "AB(+ve)";
+                    else if(filterPattern.equals("B(+ve)") || filterPattern.equals("B+") || filterPattern.equals("b(+ve)") || filterPattern.equals("b+")) filterPattern = "B(+ve)";
+                    else if(filterPattern.equals("A(-ve)") || filterPattern.equals("A-") || filterPattern.equals("a(-ve)") || filterPattern.equals("a-")) filterPattern = "A(-ve)";
+                    else if(filterPattern.equals("AB(-ve)") || filterPattern.equals("AB-") || filterPattern.equals("ab(-ve)") || filterPattern.equals("ab-")) filterPattern = "AB(-ve)";
+                    else if(filterPattern.equals("B(-ve)") || filterPattern.equals("B-") || filterPattern.equals("b(-ve)") || filterPattern.equals("b-")) filterPattern = "B(-ve)";
+                    else if(filterPattern.equals("O(-ve)") || filterPattern.equals("O-") || filterPattern.equals("o(-ve)") || filterPattern.equals("o-")) filterPattern = "O(-ve)";
+
+                    if(item.getBlood_group().contains(filterPattern) || item.getBlood_group().equals(filterPattern))
                     {
                         filteredList.add(item);
                     }

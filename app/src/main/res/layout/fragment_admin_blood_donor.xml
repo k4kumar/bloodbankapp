@@ -20,11 +20,13 @@
             app:boxBackgroundColor="@color/white"
             android:background="@color/white"
             android:textColorHint="@color/colorPrimary">
-            <EditText android:id="@+id/searchFilter"
+
+            <EditText
+                android:id="@+id/searchFilter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPersonName"
-                android:hint="Search by regno, name, bloodgroup etc."/>
+                android:hint="Search by bloodgroup"
+                android:inputType="textPersonName" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <!-- TODO: Update blank fragment layout -->
